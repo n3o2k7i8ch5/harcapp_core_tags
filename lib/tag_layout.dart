@@ -47,7 +47,7 @@ class Tag extends StatefulWidget{
   final bool elevate;
   final bool inCard;
 
-  const Tag(this.tag, {this.onTap, this.checked:true, this.fontSize, this.margin: defMargin, this.padding: const EdgeInsets.all(Dimen.MARG_ICON), this.elevate: true, this.inCard: true});
+  const Tag(this.tag, {this.onTap, this.checked:true, this.fontSize, this.margin: defMargin, this.padding: const EdgeInsets.all(Dimen.ICON_MARG), this.elevate: true, this.inCard: true});
 
   @override
   State<StatefulWidget> createState() => TagState();
@@ -113,7 +113,7 @@ class TagLayout extends StatelessWidget{
   final double fontSize;
   final Layout layout;
 
-  static double get height => Dimen.TEXT_SIZE_BIG + 2*Dimen.MARG_ICON;
+  static double get height => Dimen.TEXT_SIZE_BIG + 2*Dimen.ICON_MARG;
 
   const TagLayout({@required this.tags, this.onCancelTap, this.onTagClick, this.shadow:true, this.checked, this.fontSize: Dimen.TEXT_SIZE_NORMAL, @required this.layout});
 
