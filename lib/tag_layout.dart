@@ -117,23 +117,8 @@ class TagLayout extends StatelessWidget{
 
   const TagLayout({@required this.allTags, this.checkedTags = const [], this.onCancelTap, this.onTagTap, this.shadow:true, this.fontSize: Dimen.TEXT_SIZE_NORMAL, @required this.layout});
 
-  static List<Tag> getTags(Function(String, int, bool) onTagClick, List<bool> checked, double fontSize){
-
-    List<Tag> tags = [];
-    for(int i=0; i<Tag.ALL_TAG_NAMES.length; i++)
-      tags.add(
-          Tag(
-            Tag.ALL_TAG_NAMES[i],
-            onTap: onTagClick==null?null:(bool checked)=> onTagClick(Tag.ALL_TAG_NAMES[i], i, checked),
-            checked: checked==null?true:checked[i],
-            fontSize: fontSize,
-          )
-      );
-    return tags;
-  }
-
   static TagLayout wrap({
-    List<String> allTags,
+    @required List<String> allTags,
     List<String> checkedTags,
     Function onCancelTap,
     Function(String, bool) onTagTap,
@@ -150,7 +135,7 @@ class TagLayout extends StatelessWidget{
     );
 
   static TagLayout linear({
-    List<String> allTags,
+    @required List<String> allTags,
     List<String> checkedTags,
     Function onCancelTap,
     Function(String, bool) onTagTap,
