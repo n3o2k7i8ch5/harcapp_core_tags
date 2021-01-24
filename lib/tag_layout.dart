@@ -38,7 +38,7 @@ class Tag extends StatefulWidget{
   static const double height = 2*Dimen.DEF_MARG + Dimen.TEXT_SIZE_SMALL;
   static const EdgeInsets defMargin = EdgeInsets.only(left: Dimen.DEF_MARG/2, right: Dimen.DEF_MARG/2, top: Dimen.DEF_MARG, bottom: Dimen.DEF_MARG+2);
 
-  final String tag;
+  final String text;
   final Function(bool checked) onTap;
   final bool checked;
   final double fontSize;
@@ -47,13 +47,16 @@ class Tag extends StatefulWidget{
   final bool elevate;
   final bool inCard;
 
-  const Tag(this.tag, {this.onTap, this.checked:true, this.fontSize, this.margin: defMargin, this.padding: const EdgeInsets.all(Dimen.ICON_MARG), this.elevate: true, this.inCard: true});
+  const Tag(this.text, {this.onTap, this.checked:true, this.fontSize, this.margin: defMargin, this.padding: const EdgeInsets.all(Dimen.ICON_MARG), this.elevate: true, this.inCard: true});
 
   @override
   State<StatefulWidget> createState() => TagState();
 }
 
 class TagState extends State<Tag>{
+
+  String get text => widget.text;
+  bool get checked => widget.checked;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +66,7 @@ class TagState extends State<Tag>{
           style: AppTextStyle(
             fontSize: widget.fontSize,
             fontWeight: weight.halfBold
-          ), text: widget.tag),
+          ), text: text),
       textDirection: TextDirection.ltr,
     );
     wordWrapText.layout();
@@ -71,11 +74,11 @@ class TagState extends State<Tag>{
 
     Widget tagStr = SizedBox(
         child: Text(
-          widget.tag,
+          text,
           style: AppTextStyle(
             fontSize: widget.fontSize,
-            fontWeight: widget.checked?weight.halfBold:weight.normal,
-            color: widget.checked?textEnabled(context):hintEnabled(context),
+            fontWeight: checked?weight.halfBold:weight.normal,
+            color: checked?textEnabled(context):hintEnabled(context),
           ),
           textAlign: TextAlign.center,
         ),
@@ -84,20 +87,20 @@ class TagState extends State<Tag>{
 
     if(widget.inCard)
       return AppCard(
-        elevation: (widget.checked && widget.elevate)?AppCard.bigElevation:0,
-        color: widget.checked?defCardEnabled(context):defCardDisabled(context),
+        elevation: (checked && widget.elevate)?AppCard.bigElevation:0,
+        color: checked?defCardEnabled(context):defCardDisabled(context),
         padding: widget.padding,
         child: tagStr,
         margin: widget.margin,
         radius: 100.0,
-        onTap: widget.onTap==null?null:() => widget.onTap(widget.checked)
+        onTap: widget.onTap==null?null:() => widget.onTap(checked)
       );
     else
       return SimpleButton(
         child: tagStr,
         margin: widget.margin,
         padding: widget.padding,
-        onTap: widget.onTap==null?null:() => widget.onTap(widget.checked)
+        onTap: widget.onTap==null?null:() => widget.onTap(checked)
       );
   }
 }
