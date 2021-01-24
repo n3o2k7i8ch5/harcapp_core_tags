@@ -105,17 +105,17 @@ class TagState extends State<Tag>{
 enum Layout{LINEAR, WRAP}
 class TagLayout extends StatelessWidget{
 
-  final List<Tag> tags;
+  final List<String> allTags;
+  final List<String> checkedTags;
   final Function onCancelTap;
-  final Function(String, int, bool) onTagClick;
+  final Function(String, bool) onTagTap;
   final bool shadow;
-  final List<bool> checked;
   final double fontSize;
   final Layout layout;
 
   static double get height => Dimen.TEXT_SIZE_BIG + 2*Dimen.ICON_MARG;
 
-  const TagLayout({@required this.tags, this.onCancelTap, this.onTagClick, this.shadow:true, this.checked, this.fontSize: Dimen.TEXT_SIZE_NORMAL, @required this.layout});
+  const TagLayout({@required this.allTags, this.checkedTags = const [], this.onCancelTap, this.onTagTap, this.shadow:true, this.fontSize: Dimen.TEXT_SIZE_NORMAL, @required this.layout});
 
   static List<Tag> getTags(Function(String, int, bool) onTagClick, List<bool> checked, double fontSize){
 
@@ -133,37 +133,51 @@ class TagLayout extends StatelessWidget{
   }
 
   static TagLayout wrap({
+    List<String> allTags,
+    List<String> checkedTags,
     Function onCancelTap,
-    Function(String, int, bool) onTagClick,
+    Function(String, bool) onTagTap,
     bool shadow,
-    List<bool> checked,
     double fontSize,
   }) => TagLayout(
-      tags: getTags(onTagClick, checked, fontSize),
+      allTags: allTags,
+      checkedTags: checkedTags,
       onCancelTap: onCancelTap,
-      onTagClick: onTagClick,
+      onTagTap: onTagTap,
       shadow: shadow,
-      checked: checked,
       fontSize: fontSize,
       layout: Layout.WRAP,
     );
 
   static TagLayout linear({
+    List<String> allTags,
+    List<String> checkedTags,
     Function onCancelTap,
-    Function(String, int, bool) onTagClick,
-    List<bool> checked,
+    Function(String, bool) onTagTap,
+    bool shadow,
     double fontSize,
   }) => TagLayout(
-      tags: getTags(onTagClick, checked, fontSize),
+      allTags: allTags,
+      checkedTags: checkedTags,
       onCancelTap: onCancelTap,
-      onTagClick: onTagClick,
-      checked: checked,
+      onTagTap: onTagTap,
+      shadow: shadow,
       fontSize: fontSize,
       layout: Layout.LINEAR,
     );
 
   @override
   Widget build(BuildContext context) {
+
+    List<Tag> tags = [];
+    for(String tagStr in allTags){
+      tags.add(Tag(
+        tagStr,
+        onTap: onTagTap==null?null:(bool checked) => onTagTap(tagStr, checked),
+        checked: checkedTags.contains(tagStr),
+        fontSize: fontSize,
+      ));
+    }
 
     return InkWell(
         onTap: onCancelTap,
