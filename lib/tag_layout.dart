@@ -115,7 +115,7 @@ class TagLayout extends StatelessWidget{
   final bool shadow;
   final double fontSize;
   final Layout layout;
-  final Widget Function(BuildContext, String) customBuilder;
+  final Widget Function(BuildContext, String, void Function(String, bool) onTagTap) customBuilder;
 
   static double get height => Dimen.TEXT_SIZE_BIG + 2*Dimen.ICON_MARG;
 
@@ -128,7 +128,7 @@ class TagLayout extends StatelessWidget{
     Function(String, bool) onTagTap,
     bool shadow,
     double fontSize,
-    Widget Function(BuildContext, String) customBuilder
+    Widget Function(BuildContext, String, void Function(String, bool) onTagTap) customBuilder
   }) => TagLayout(
       allTags: allTags,
       checkedTags: checkedTags,
@@ -147,7 +147,7 @@ class TagLayout extends StatelessWidget{
     Function(String, bool) onTagTap,
     bool shadow,
     double fontSize,
-    Widget Function(BuildContext, String) customBuilder
+    Widget Function(BuildContext, String, void Function(String, bool) onTagTap) customBuilder
   }) => TagLayout(
       allTags: allTags,
       checkedTags: checkedTags,
@@ -175,7 +175,7 @@ class TagLayout extends StatelessWidget{
         );
     else
       for(String tagStr in allTags)
-        tags.add(customBuilder(context, tagStr));
+        tags.add(customBuilder(context, tagStr, onTagTap));
 
     return InkWell(
         onTap: onCancelTap,
