@@ -115,10 +115,11 @@ class TagLayout extends StatelessWidget{
   final bool shadow;
   final double fontSize;
   final Layout layout;
+  final Widget Function(BuildContext, String) customBuilder;
 
   static double get height => Dimen.TEXT_SIZE_BIG + 2*Dimen.ICON_MARG;
 
-  const TagLayout({@required this.allTags, this.checkedTags = const [], this.onCancelTap, this.onTagTap, this.shadow:true, this.fontSize: Dimen.TEXT_SIZE_NORMAL, @required this.layout});
+  const TagLayout({@required this.allTags, this.checkedTags = const [], this.onCancelTap, this.onTagTap, this.shadow:true, this.fontSize: Dimen.TEXT_SIZE_NORMAL, @required this.layout, this.customBuilder});
 
   static TagLayout wrap({
     @required List<String> allTags,
@@ -127,6 +128,7 @@ class TagLayout extends StatelessWidget{
     Function(String, bool) onTagTap,
     bool shadow,
     double fontSize,
+    Widget Function(BuildContext, String) customBuilder
   }) => TagLayout(
       allTags: allTags,
       checkedTags: checkedTags,
@@ -135,7 +137,8 @@ class TagLayout extends StatelessWidget{
       shadow: shadow,
       fontSize: fontSize,
       layout: Layout.WRAP,
-    );
+      customBuilder: customBuilder,
+  );
 
   static TagLayout linear({
     @required List<String> allTags,
@@ -144,6 +147,7 @@ class TagLayout extends StatelessWidget{
     Function(String, bool) onTagTap,
     bool shadow,
     double fontSize,
+    Widget Function(BuildContext, String) customBuilder
   }) => TagLayout(
       allTags: allTags,
       checkedTags: checkedTags,
@@ -152,20 +156,26 @@ class TagLayout extends StatelessWidget{
       shadow: shadow,
       fontSize: fontSize,
       layout: Layout.LINEAR,
+      customBuilder: customBuilder,
     );
 
   @override
   Widget build(BuildContext context) {
 
     List<Tag> tags = [];
-    for(String tagStr in allTags){
-      tags.add(Tag(
-        tagStr,
-        onTap: onTagTap==null?null:(bool checked) => onTagTap(tagStr, checked),
-        checked: checkedTags.contains(tagStr),
-        fontSize: fontSize,
-      ));
-    }
+    if(customBuilder == null)
+      for(String tagStr in allTags)
+        tags.add(
+            Tag(
+              tagStr,
+              onTap: onTagTap==null?null:(bool checked) => onTagTap(tagStr, checked),
+              checked: checkedTags.contains(tagStr),
+              fontSize: fontSize,
+            )
+        );
+    else
+      for(String tagStr in allTags)
+        tags.add(customBuilder(context, tagStr));
 
     return InkWell(
         onTap: onCancelTap,
