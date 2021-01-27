@@ -123,7 +123,7 @@ class TagLayout extends StatelessWidget{
     @required List<String> allTags,
     List<String> checkedTags,
     Function(String, bool) onTagTap,
-    double separator,
+    double separator=0,
     @required Widget Function(BuildContext, String, bool) tagBuilder
   }) => TagLayout(
     allTags: allTags,
@@ -138,7 +138,7 @@ class TagLayout extends StatelessWidget{
     @required List<String> allTags,
     List<String> checkedTags,
     Function(String, bool) onTagTap,
-    double separator,
+    double separator=0,
     Widget Function(BuildContext, String, bool) tagBuilder
   }) => TagLayout(
     allTags: allTags,
@@ -153,7 +153,7 @@ class TagLayout extends StatelessWidget{
     @required List<String> allTags,
     List<String> checkedTags,
     Function(String, bool) onTagTap,
-    double separator,
+    double separator=0,
     double fontSize: Dimen.TEXT_SIZE_NORMAL,
   }) => TagLayout(
     allTags: allTags,
@@ -173,7 +173,7 @@ class TagLayout extends StatelessWidget{
     @required List<String> allTags,
     List<String> checkedTags,
     Function(String, bool) onTagTap,
-    double separator,
+    double separator=0,
     double fontSize: Dimen.TEXT_SIZE_NORMAL,
   }) => TagLayout(
     allTags: allTags,
