@@ -162,7 +162,7 @@ class TagLayout extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    List<Tag> tags = [];
+    List<Widget> tags = [];
     if(customBuilder == null)
       for(String tagStr in allTags)
         tags.add(
