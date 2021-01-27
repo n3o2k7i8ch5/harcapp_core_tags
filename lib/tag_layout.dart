@@ -117,7 +117,7 @@ class TagLayout extends StatelessWidget{
 
   static double get height => Dimen.TEXT_SIZE_BIG + 2*Dimen.ICON_MARG;
 
-  const TagLayout({@required this.allTags, this.checkedTags = const [], this.onTagTap, this.separator, @required this.layout, @required this.tagBuilder});
+  const TagLayout({@required this.allTags, this.checkedTags = const [], this.onTagTap, this.separator: 0, @required this.layout, @required this.tagBuilder});
 
   static TagLayout customWrap({
     @required List<String> allTags,
