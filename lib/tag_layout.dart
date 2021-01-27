@@ -110,92 +110,107 @@ class TagLayout extends StatelessWidget{
 
   final List<String> allTags;
   final List<String> checkedTags;
-  final Function onCancelTap;
   final Function(String, bool) onTagTap;
-  final bool shadow;
-  final double fontSize;
+  //final bool shadow;
+  //final double fontSize;
   final Layout layout;
-  final Widget Function(BuildContext, String, void Function(String, bool) onTagTap) customBuilder;
+  final Widget Function(BuildContext, String, bool) tagBuilder;
 
   static double get height => Dimen.TEXT_SIZE_BIG + 2*Dimen.ICON_MARG;
 
-  const TagLayout({@required this.allTags, this.checkedTags = const [], this.onCancelTap, this.onTagTap, this.shadow:true, this.fontSize: Dimen.TEXT_SIZE_NORMAL, @required this.layout, this.customBuilder});
+  const TagLayout({@required this.allTags, this.checkedTags = const [], this.onTagTap, /*this.shadow:true, this.fontSize: Dimen.TEXT_SIZE_NORMAL,*/ @required this.layout, @required this.tagBuilder});
 
-  static TagLayout wrap({
+  static TagLayout customWrap({
     @required List<String> allTags,
     List<String> checkedTags,
-    Function onCancelTap,
     Function(String, bool) onTagTap,
-    bool shadow,
-    double fontSize,
-    Widget Function(BuildContext, String, void Function(String, bool) onTagTap) customBuilder
+    //bool shadow,
+    //double fontSize,
+    @required Widget Function(BuildContext, String, bool) tagBuilder
   }) => TagLayout(
       allTags: allTags,
       checkedTags: checkedTags,
-      onCancelTap: onCancelTap,
       onTagTap: onTagTap,
-      shadow: shadow,
-      fontSize: fontSize,
+      //shadow: shadow,
+      //fontSize: fontSize,
       layout: Layout.WRAP,
-      customBuilder: customBuilder,
+      tagBuilder: tagBuilder,
   );
+
+  static TagLayout customLinear({
+    @required List<String> allTags,
+    List<String> checkedTags,
+    Function(String, bool) onTagTap,
+    //bool shadow,
+    //double fontSize,
+    Widget Function(BuildContext, String, bool) tagBuilder
+  }) => TagLayout(
+      allTags: allTags,
+      checkedTags: checkedTags,
+      onTagTap: onTagTap,
+      //shadow: shadow,
+      //fontSize: fontSize,
+      layout: Layout.LINEAR,
+      tagBuilder: tagBuilder,
+    );
 
   static TagLayout linear({
     @required List<String> allTags,
     List<String> checkedTags,
-    Function onCancelTap,
     Function(String, bool) onTagTap,
-    bool shadow,
-    double fontSize,
-    Widget Function(BuildContext, String, void Function(String, bool) onTagTap) customBuilder
+    //bool shadow,
+    double fontSize: Dimen.TEXT_SIZE_NORMAL,
   }) => TagLayout(
-      allTags: allTags,
-      checkedTags: checkedTags,
-      onCancelTap: onCancelTap,
-      onTagTap: onTagTap,
-      shadow: shadow,
+    allTags: allTags,
+    checkedTags: checkedTags,
+    onTagTap: onTagTap,
+    //shadow: shadow,
+    layout: Layout.LINEAR,
+    tagBuilder: (context, tag, chekced) => Tag(
+      tag,
+      onTap: onTagTap==null?null:(bool checked) => onTagTap(tag, checked),
+      checked: checkedTags.contains(tag),
       fontSize: fontSize,
-      layout: Layout.LINEAR,
-      customBuilder: customBuilder,
-    );
+    ),
+  );
+
+  static TagLayout wrap({
+    @required List<String> allTags,
+    List<String> checkedTags,
+    Function(String, bool) onTagTap,
+    //bool shadow,
+    double fontSize: Dimen.TEXT_SIZE_NORMAL,
+  }) => TagLayout(
+    allTags: allTags,
+    checkedTags: checkedTags,
+    onTagTap: onTagTap,
+    //shadow: shadow,
+    layout: Layout.WRAP,
+    tagBuilder: (context, tag, chekced) => Tag(
+      tag,
+      onTap: onTagTap==null?null:(bool checked) => onTagTap(tag, checked),
+      checked: checkedTags.contains(tag),
+      fontSize: fontSize,
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
 
     List<Widget> tags = [];
-    if(customBuilder == null)
-      for(String tagStr in allTags)
-        tags.add(
-            Tag(
-              tagStr,
-              onTap: onTagTap==null?null:(bool checked) => onTagTap(tagStr, checked),
-              checked: checkedTags.contains(tagStr),
-              fontSize: fontSize,
-            )
-        );
-    else
-      for(String tagStr in allTags)
-        tags.add(customBuilder(context, tagStr, onTagTap));
+    for(String tagStr in allTags)
+      tags.add(tagBuilder(context, tagStr, checkedTags.contains(tagStr)));
 
-    return InkWell(
-        onTap: onCancelTap,
-        child: Container(
-            width: double.infinity,
-            child:
-            layout == Layout.WRAP?
-            Wrap(
-              alignment: WrapAlignment.center,
-              children: tags,
-            ):
-            FadeScrollView(
-              padding: EdgeInsets.only(bottom: AppCard.bigElevation + 1),
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: tags,
-              )
-            ),
-        )
+    return layout == Layout.WRAP?
+    Wrap(
+      alignment: WrapAlignment.center,
+      children: tags,
+    ):
+    FadeScrollView(
+        padding: EdgeInsets.only(bottom: AppCard.bigElevation + 1),
+        physics: BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        child: Row(children: tags)
     );
   }
 }
