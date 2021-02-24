@@ -78,7 +78,7 @@ class TagState extends State<Tag>{
           style: AppTextStyle(
             fontSize: widget.fontSize,
             fontWeight: checked?weight.halfBold:weight.normal,
-            color: checked?textEnabled(context):hintEnabled(context),
+            color: checked?textEnab_(context):hintEnabled(context),
           ),
           textAlign: TextAlign.center,
         ),
@@ -88,7 +88,7 @@ class TagState extends State<Tag>{
     if(widget.inCard)
       return AppCard(
           elevation: (checked && widget.elevate)?AppCard.bigElevation:0,
-          color: checked?defCardEnabled(context):defCardDisabled(context),
+          color: checked?cardEnab_(context):defCardDisabled(context),
           padding: widget.padding,
           child: tagStr,
           margin: widget.margin,
