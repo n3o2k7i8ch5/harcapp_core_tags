@@ -35,7 +35,7 @@ class Tag extends StatefulWidget{
     TAG_REFLEKSYJNE, TAG_RELIGIJNE, TAG_SPOKOJNE, TAG_SZANTY, TAG_TURYSTYCZNE,
     TAG_Z_BAJEK, TAG_ZYWE];
 
-  static const double height = 2*Dimen.DEF_MARG + Dimen.TEXT_SIZE_SMALL;
+  static const double height = Dimen.DEF_MARG + 2*Dimen.ICON_MARG + Dimen.TEXT_SIZE_SMALL;
   static const EdgeInsets defMargin = EdgeInsets.only(left: Dimen.DEF_MARG/2, right: Dimen.DEF_MARG/2, top: Dimen.DEF_MARG, bottom: Dimen.DEF_MARG+2);
 
   final String text;
