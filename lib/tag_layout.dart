@@ -39,9 +39,9 @@ class Tag extends StatefulWidget{
   static const EdgeInsets defMargin = EdgeInsets.only(left: Dimen.DEF_MARG/2, right: Dimen.DEF_MARG/2, top: Dimen.DEF_MARG, bottom: Dimen.DEF_MARG+2);
 
   final String text;
-  final Function(bool checked) onTap;
+  final Function(bool checked)? onTap;
   final bool checked;
-  final double fontSize;
+  final double? fontSize;
   final EdgeInsets margin;
   final EdgeInsets padding;
   final bool elevate;
@@ -92,14 +92,14 @@ class TagState extends State<Tag>{
           child: tagStr,
           margin: widget.margin,
           radius: 100.0,
-          onTap: widget.onTap==null?null:() => widget.onTap(checked)
+          onTap: widget.onTap==null?null:() => widget.onTap!(checked)
       );
     else
       return SimpleButton(
           child: tagStr,
           margin: widget.margin,
           padding: widget.padding,
-          onTap: widget.onTap==null?null:() => widget.onTap(checked)
+          onTap: widget.onTap==null?null:() => widget.onTap!(checked)
       );
   }
 }
@@ -108,22 +108,22 @@ enum Layout{LINEAR, WRAP}
 class TagLayout extends StatelessWidget{
 
   final List<String> allTags;
-  final List<String> checkedTags;
-  final Function(String, bool) onTagTap;
+  final List<String>? checkedTags;
+  final Function(String, bool)? onTagTap;
   final double separator;
   final Layout layout;
-  final Widget Function(BuildContext, String, bool) tagBuilder;
+  final Widget Function(BuildContext, String, bool)? tagBuilder;
 
   static double get height => Dimen.TEXT_SIZE_BIG + 2*Dimen.ICON_MARG;
 
-  const TagLayout({@required this.allTags, this.checkedTags = const [], this.onTagTap, this.separator: 0, @required this.layout, @required this.tagBuilder});
+  const TagLayout({required this.allTags, this.checkedTags = const [], this.onTagTap, this.separator: 0, required this.layout, required this.tagBuilder});
 
   static TagLayout customWrap({
-    @required List<String> allTags,
-    List<String> checkedTags,
-    Function(String, bool) onTagTap,
+    required List<String> allTags,
+    List<String>? checkedTags,
+    Function(String, bool)? onTagTap,
     double separator=0,
-    @required Widget Function(BuildContext, String, bool) tagBuilder
+    required Widget Function(BuildContext, String, bool) tagBuilder
   }) => TagLayout(
     allTags: allTags,
     checkedTags: checkedTags,
@@ -134,11 +134,11 @@ class TagLayout extends StatelessWidget{
   );
 
   static TagLayout customLinear({
-    @required List<String> allTags,
-    List<String> checkedTags,
-    Function(String, bool) onTagTap,
+    required List<String> allTags,
+    List<String>? checkedTags,
+    Function(String, bool)? onTagTap,
     double separator=0,
-    Widget Function(BuildContext, String, bool) tagBuilder
+    Widget Function(BuildContext, String, bool)? tagBuilder
   }) => TagLayout(
     allTags: allTags,
     checkedTags: checkedTags,
@@ -149,9 +149,9 @@ class TagLayout extends StatelessWidget{
   );
 
   static TagLayout linear({
-    @required List<String> allTags,
-    List<String> checkedTags,
-    Function(String, bool) onTagTap,
+    required List<String> allTags,
+    List<String>? checkedTags,
+    Function(String, bool)? onTagTap,
     double separator=0,
     double fontSize: Dimen.TEXT_SIZE_NORMAL,
   }) => TagLayout(
@@ -163,15 +163,15 @@ class TagLayout extends StatelessWidget{
     tagBuilder: (context, tag, chekced) => Tag(
       tag,
       onTap: onTagTap==null?null:(bool checked) => onTagTap(tag, checked),
-      checked: checkedTags.contains(tag),
+      checked: checkedTags!.contains(tag),
       fontSize: fontSize,
     ),
   );
 
   static TagLayout wrap({
-    @required List<String> allTags,
-    List<String> checkedTags,
-    Function(String, bool) onTagTap,
+    required List<String> allTags,
+    List<String>? checkedTags,
+    Function(String, bool)? onTagTap,
     double separator=0,
     double fontSize: Dimen.TEXT_SIZE_NORMAL,
   }) => TagLayout(
@@ -183,7 +183,7 @@ class TagLayout extends StatelessWidget{
     tagBuilder: (context, tag, chekced) => Tag(
       tag,
       onTap: onTagTap==null?null:(bool checked) => onTagTap(tag, checked),
-      checked: checkedTags.contains(tag),
+      checked: checkedTags!.contains(tag),
       fontSize: fontSize,
     ),
   );
@@ -194,7 +194,7 @@ class TagLayout extends StatelessWidget{
     List<Widget> tags = [];
     for(int i=0; i<allTags.length; i++) {
       String tagStr = allTags[i];
-      tags.add(tagBuilder(context, tagStr, checkedTags.contains(tagStr)));
+      tags.add(tagBuilder!(context, tagStr, checkedTags!.contains(tagStr)));
       if(i < allTags.length-1)
         tags.add(SizedBox(width: separator));
     }
